@@ -1,0 +1,587 @@
+# glossary_seed.yaml — 繁中 → 英文 數學術語鎖（種子表）
+#
+# 用途：翻譯繁體中文數學教材（以線性代數為主）到英文時的術語鎖種子。
+#       複製到自己的專案後，再依教材內容逐步補詞；本表只收通用條目。
+# 規則：翻譯時遇到本表收錄的中文詞，一律使用 en 欄位的譯法，不臨場自由發揮。
+#       遇到本表沒有的術語，先補進本表再翻譯。
+#       繁體中文慣例：行 = column、列 = row（與簡體中文相反），是最常見的誤譯來源。
+#
+# 欄位：
+#   tc     必填，繁體中文術語（可用 " / " 列出同義寫法）
+#   en     必填，鎖定的英文譯法（首選寫在最前面）
+#   note   選填，語義適用條件，或應排除的誤譯
+#   src    選填，條目來源；本種子表的條目一律為 seed，自行補詞時可填所在檔案或章節
+
+meta:
+  version: 1
+  updated: null
+  covers: []
+
+entries:
+
+  # ===== 0. 最高風險：易誤譯（不得偏離） =====
+  - tc: 嵌射 / 單射 / 1 to 1
+    en: injective (injection)
+    note: 易誤譯：絕不譯為 embedding map / embedding；名詞用 injection，形容詞用 injective，口語補述用 one-to-one。
+    src: seed
+  - tc: 映成函數 / 滿射 / 蓋射 / 映成
+    en: surjective (surjection)
+    note: 易誤譯：不譯為 mapping onto function。形容詞 surjective，名詞 surjection，口語補述用 onto。
+    src: seed
+  - tc: 對射 / 雙射 / 可逆映射
+    en: bijective (bijection)
+    note: 易誤譯：作為「雙射」同義詞時一律 bijective；「可逆映射」只在強調可逆性的句子裡可譯 invertible mapping。
+    src: seed
+  - tc: 純量
+    en: scalar
+    note: 易誤譯：不譯為 pure quantity / number。
+    src: seed
+  - tc: 坐標變換矩陣 / 座標變換矩陣
+    en: change-of-basis matrix
+    note: 易誤譯：不譯為 coordinate transformation matrix；連字號寫法固定為 change-of-basis。若專案另外區分 change-of-coordinates matrix（方向相反），依專案的定義改。
+    src: seed
+
+  # ===== 1. 最關鍵的行／列對應（繁中與簡中相反，翻譯時最易出錯） =====
+  - tc: 行
+    en: column
+    note: 繁體中文慣例：行 = column、列 = row。「第 j 行」= the j-th column。切勿順著字面譯成 row。
+    src: seed
+  - tc: 列
+    en: row
+    note: 繁體中文慣例。「第 i 列」= the i-th row。
+    src: seed
+  - tc: 行向量
+    en: column vector
+    src: seed
+  - tc: 列向量
+    en: row vector
+    src: seed
+  - tc: 行空間
+    en: column space
+    note: Col(A)。
+    src: seed
+  - tc: 列空間
+    en: row space
+    note: Row(A)。
+    src: seed
+  - tc: 行列式
+    en: determinant
+    note: 固定數學術語，整體翻譯，不可拆成 column-row 式的字面對應。
+    src: seed
+
+  # ===== 2. 集合論 =====
+  - tc: 集合
+    en: set
+    src: seed
+  - tc: 集合論
+    en: set theory
+    src: seed
+  - tc: 元素 / 成員
+    en: element / member
+    src: seed
+  - tc: 屬於
+    en: belongs to / is an element of
+    note: a ∈ A 讀作 "a is an element of A" 或 "a belongs to A"。
+    src: seed
+  - tc: 確定性
+    en: definiteness
+    note: 集合三特性之一（任一對象要麼屬於、要麼不屬於）。不譯 determinacy / certainty。
+    src: seed
+  - tc: 互異性
+    en: distinctness
+    src: seed
+  - tc: 無序性
+    en: unorderedness
+    note: 作為並列的三個特性標題時固定用 unorderedness；行文中可寫 "no inherent order"。
+    src: seed
+  - tc: 列舉法
+    en: roster notation
+    note: 直接列出元素。不用 enumeration method。
+    src: seed
+  - tc: 描述法
+    en: set-builder notation
+    note: 以性質描述集合。不用 description method。
+    src: seed
+  - tc: 子集 / 子集合
+    en: subset
+    src: seed
+  - tc: 包含
+    en: contains / inclusion
+    note: A ⊆ B 說 "B contains A"；名詞的「包含關係」用 inclusion。
+    src: seed
+  - tc: 集合相等
+    en: set equality
+    src: seed
+  - tc: 雙包含法
+    en: double inclusion
+    note: 證明 A = B 的標準方法（分別證 A ⊆ B 與 B ⊆ A）。
+    src: seed
+  - tc: 全集
+    en: universal set
+    note: 記作 U。
+    src: seed
+  - tc: 單元素集合
+    en: singleton
+    src: seed
+  - tc: 空集合 / 空集
+    en: empty set
+    note: 用 the empty set；避免 null set。
+    src: seed
+  - tc: 空虛真理
+    en: vacuous truth
+    src: seed
+  - tc: 冪集合 / 冪集
+    en: power set
+    note: P(A)。
+    src: seed
+  - tc: 笛卡兒積 / 直積
+    en: Cartesian product
+    note: 大寫 C（源自人名 Descartes）。「直積」指集合的笛卡兒積時同義；若強調 n 重，寫 n-fold Cartesian product。
+    src: seed
+  - tc: 笛卡兒座標系
+    en: Cartesian coordinate system
+    src: seed
+  - tc: 有序對
+    en: ordered pair
+    src: seed
+  - tc: n 元有序組
+    en: ordered n-tuple
+    src: seed
+  - tc: 聯集
+    en: union
+    src: seed
+  - tc: 交集
+    en: intersection
+    src: seed
+  - tc: 補集
+    en: complement
+    src: seed
+  - tc: 差集
+    en: set difference
+    src: seed
+  - tc: 文氏圖
+    en: Venn diagram
+    src: seed
+  - tc: 容斥原理
+    en: inclusion-exclusion principle
+    src: seed
+  - tc: 基數
+    en: cardinality
+    note: "|S|，元素個數。"
+    src: seed
+  - tc: 集合等勢
+    en: equinumerosity
+    note: 兩集合間存在雙射。形容詞用 equinumerous；行文亦可寫 "have the same cardinality"。
+    src: seed
+  - tc: 有限集
+    en: finite set
+    src: seed
+
+  # ===== 3. 邏輯記號 =====
+  - tc: 使得
+    en: such that
+    note: 集合建構式中豎線的讀法。
+    src: seed
+  - tc: 對所有
+    en: for all
+    src: seed
+  - tc: 存在
+    en: there exists
+    src: seed
+  - tc: 蘊涵
+    en: implies
+    note: 名詞形式用 implication。
+    src: seed
+  - tc: 若且唯若
+    en: if and only if
+    note: 行文用 if and only if；不縮寫成 iff（教科書語域）。
+    src: seed
+  - tc: 充要條件
+    en: necessary and sufficient condition
+    src: seed
+  - tc: 敘述 / 命題
+    en: statement / proposition
+    note: 邏輯敘述 P(x) 用 statement；作為待證數學命題時用 proposition。
+    src: seed
+  - tc: 等價表述
+    en: equivalent formulation
+    src: seed
+  - tc: 數學歸納法
+    en: mathematical induction
+    src: seed
+  - tc: 反例
+    en: counterexample
+    src: seed
+
+  # ===== 4. 數系與體 =====
+  - tc: 數域 / 體
+    en: field
+    note: 線性代數語境指係數所在的域（如 ℝ、ℂ）；代數數論的 number field 不適用本條。
+    src: seed
+  - tc: 有限體
+    en: finite field
+    src: seed
+  - tc: 自然數集
+    en: the set of natural numbers
+    src: seed
+  - tc: 整數集
+    en: the set of integers
+    src: seed
+  - tc: 有理數集
+    en: the set of rational numbers
+    src: seed
+  - tc: 無理數
+    en: irrational number
+    src: seed
+  - tc: 實數集
+    en: the set of real numbers
+    src: seed
+  - tc: 複數集
+    en: the set of complex numbers
+    src: seed
+  - tc: 質數
+    en: prime number
+    src: seed
+  - tc: 餘數
+    en: remainder
+    note: 「除以 p 取餘數」= reduction modulo p。
+    src: seed
+  - tc: 戴德金分割
+    en: Dedekind cut
+    src: seed
+  - tc: 劃分
+    en: partition
+    note: 集合的劃分。與分塊矩陣的 partition 同字，依上下文判斷即可。
+    src: seed
+
+  # ===== 4b. 敘事段落用語 =====
+  - tc: 形式化
+    en: formalization
+    note: 動詞用 formalize。「形式化語言」= formal language。
+    src: seed
+  - tc: 幾何直覺
+    en: geometric intuition
+    src: seed
+  - tc: 病態函數
+    en: pathological function
+    src: seed
+  - tc: 連續
+    en: continuous
+    note: 名詞 continuity。
+    src: seed
+  - tc: 可微
+    en: differentiable
+    note: 「處處不可微」= differentiable nowhere。
+    src: seed
+  - tc: 切線
+    en: tangent line
+    src: seed
+  - tc: 公理
+    en: axiom
+    note: 「滿足八條公理」= satisfying eight axioms。
+    src: seed
+  - tc: 代數結構
+    en: algebraic structure
+    note: 布爾巴基三種母結構之一（組合規則）。
+    src: seed
+  - tc: 序結構
+    en: order structure
+    note: 布爾巴基三種母結構之一（大小比較）。
+    src: seed
+  - tc: 拓撲結構
+    en: topological structure
+    note: 布爾巴基三種母結構之一（連續與鄰近）。
+    src: seed
+
+  # ===== 5. 映射 =====
+  - tc: 映射
+    en: mapping
+    note: 主用 mapping；map 僅在數學式或緊湊行文中使用。
+    src: seed
+  - tc: 函數
+    en: function
+    src: seed
+  - tc: 變換
+    en: transformation
+    src: seed
+  - tc: 態射
+    en: morphism
+    src: seed
+  - tc: 定義域
+    en: domain
+    src: seed
+  - tc: 對應域
+    en: codomain
+    note: 不譯 target set / range；range 保留給「值域」，兩者須區分。
+    src: seed
+  - tc: 像
+    en: image
+    note: 元素的像 = the image of an element。
+    src: seed
+  - tc: 像集
+    en: image of a set
+    note: f[A]。行文可寫 the image of A under f。
+    src: seed
+  - tc: 值域
+    en: range
+    note: f[X] = Im f，即 image of f。與 codomain 嚴格區分。
+    src: seed
+  - tc: 像空間
+    en: image
+    note: Im(T)，線性變換的像空間。強調其為子空間時可寫 image (range) of T。
+    src: seed
+  - tc: 原像 / 原像集合
+    en: preimage
+    note: f^{-1}[B]。不譯 inverse image（避免與逆映射混淆）。
+    src: seed
+  - tc: 映射相等
+    en: equality of mappings
+    src: seed
+  - tc: 複合映射
+    en: composite mapping
+    note: 動詞用 compose，運算名稱用 composition。
+    src: seed
+  - tc: 恆等映射 / 恆等函數
+    en: identity mapping / identity function
+    src: seed
+  - tc: 限制映射
+    en: restriction
+    note: 行文用 the restriction of f to A。
+    src: seed
+  - tc: 逆映射
+    en: inverse mapping
+    src: seed
+  - tc: 反函數
+    en: inverse function
+    src: seed
+  - tc: 一一對應
+    en: one-to-one correspondence
+    note: 指雙射建立的對應。與「單射」的口語說法 one-to-one 區分：後者無 correspondence。
+    src: seed
+  - tc: 常數映射 / 常值函數
+    en: constant mapping / constant function
+    src: seed
+  - tc: 一般映射
+    en: general mapping
+    note: 與單射／滿射／雙射並列分類時使用。
+    src: seed
+  - tc: 多對一
+    en: many-to-one
+    src: seed
+  - tc: 結合律
+    en: associativity
+    note: 形容詞 associative。
+    src: seed
+  - tc: 交換律
+    en: commutativity
+    note: 形容詞 commutative。
+    src: seed
+  - tc: 多項式函數
+    en: polynomial function
+    src: seed
+  - tc: 指數函數
+    en: exponential function
+    src: seed
+  - tc: 對數函數
+    en: logarithmic function
+    src: seed
+  - tc: 水平線
+    en: horizontal line
+    note: 判斷單射的幾何方法（horizontal line test）。
+    src: seed
+
+  # ===== 6. 向量與矩陣 =====
+  - tc: 向量
+    en: vector
+    src: seed
+  - tc: 向量空間
+    en: vector space
+    src: seed
+  - tc: 線性生成空間 / 生成空間
+    en: span
+    note: span over K。動詞「生成」用 span。
+    src: seed
+  - tc: 線性組合
+    en: linear combination
+    src: seed
+  - tc: 線性獨立 / 線性無關
+    en: linearly independent
+    note: 名詞用 linear independence。
+    src: seed
+  - tc: 線性相關
+    en: linearly dependent
+    src: seed
+  - tc: 基底
+    en: basis
+    note: 複數 bases。「標準基底」= standard basis。
+    src: seed
+  - tc: 標準基向量
+    en: standard basis vector
+    src: seed
+  - tc: 維數 / 維度
+    en: dimension
+    src: seed
+  - tc: 子空間
+    en: subspace
+    src: seed
+  - tc: 矩陣
+    en: matrix
+    note: 複數 matrices。
+    src: seed
+  - tc: 單位矩陣
+    en: identity matrix
+    src: seed
+  - tc: 零向量
+    en: zero vector
+    src: seed
+  - tc: 零矩陣
+    en: zero matrix
+    src: seed
+  - tc: 對稱矩陣
+    en: symmetric matrix
+    src: seed
+  - tc: 轉置
+    en: transpose
+    src: seed
+  - tc: 共軛轉置
+    en: conjugate transpose
+    src: seed
+  - tc: 逆
+    en: inverse
+    note: 「可逆」= invertible。
+    src: seed
+  - tc: 偽逆
+    en: pseudoinverse
+    note: 單字，不寫 pseudo-inverse。
+    src: seed
+  - tc: 長度 / 模 / 範數
+    en: length / norm
+    note: 「l_2 長度（模、範數）」= the l_2 length (modulus, norm)。
+    src: seed
+  - tc: 跡
+    en: trace
+    src: seed
+  - tc: 秩
+    en: rank
+    src: seed
+  - tc: 零度
+    en: nullity
+    note: 核空間的維數。
+    src: seed
+  - tc: 核 / 零空間
+    en: kernel / null space
+    src: seed
+  - tc: 秩零化度定理
+    en: rank-nullity theorem
+    note: 連字號寫法固定。
+    src: seed
+  - tc: 多項式空間
+    en: polynomial space
+    src: seed
+  - tc: 函數空間
+    en: function space
+    src: seed
+
+  # ===== 7. 運算 =====
+  - tc: 內積
+    en: inner product
+    src: seed
+  - tc: 點積
+    en: dot product
+    src: seed
+  - tc: 叉積
+    en: cross product
+    note: 台灣中學常稱「外積」；本表「外積」專指 outer product，勿混。
+    src: seed
+  - tc: 外積
+    en: outer product
+    note: 指 uv* = |u⟩⟨v|（秩 1 矩陣）；「外積累加／外積展開」譯 outer-product expansion。不指 cross product，也不指 exterior/wedge product。
+    src: seed
+  - tc: Hadamard 積
+    en: Hadamard product
+    note: 對應元素相乘，亦稱 element-wise product。
+    src: seed
+  - tc: 克羅內克積
+    en: Kronecker product
+    src: seed
+  - tc: 投影
+    en: projection
+    src: seed
+  - tc: 線段
+    en: line segment
+    src: seed
+  - tc: 線性變換
+    en: linear transformation
+    note: 與「線性映射」（linear mapping）常可互換，逐句依原文用詞對應。
+    src: seed
+  - tc: 線性映射
+    en: linear mapping
+    src: seed
+  - tc: 矩陣乘法
+    en: matrix multiplication
+    src: seed
+  - tc: 線性方程組
+    en: system of linear equations
+    note: 亦可簡稱 linear system。
+    src: seed
+  - tc: 解集
+    en: solution set
+    src: seed
+
+  # ===== 8. 特徵值 =====
+  - tc: 特徵值
+    en: eigenvalue
+    src: seed
+  - tc: 特徵向量
+    en: eigenvector
+    src: seed
+  - tc: 特徵值方程
+    en: eigenvalue equation
+    src: seed
+  - tc: 特徵多項式
+    en: characteristic polynomial
+    src: seed
+  - tc: 特徵空間
+    en: eigenspace
+    src: seed
+
+  # ===== 9. 教材結構用語 =====
+  - tc: 小結
+    en: Summary
+    note: 「§X.Y 小結」→「§X.Y Summary」。
+    src: seed
+  - tc: 本章小結
+    en: Chapter Summary
+    src: seed
+  - tc: 直觀理解
+    en: Intuition
+    note: 粗體導語「**直觀理解：**」→「**Intuition.**」。
+    src: seed
+  - tc: 分析
+    en: Analysis
+    note: 粗體導語「**分析**：」→「**Analysis.**」。
+    src: seed
+  - tc: 提示
+    en: Hint
+    note: 習題中的「*提示*：」→「*Hint.*」。
+    src: seed
+  - tc: 記號
+    en: Notation
+    src: seed
+  - tc: 關鍵特性
+    en: Key properties
+    src: seed
+
+  # ===== 10. 程式碼 cell 中的中文（註解與字串字面值） =====
+  - tc: 配色方案
+    en: Color palette
+    src: seed
+  - tc: 畫布背景
+    en: canvas background
+    src: seed
+  - tc: 格線
+    en: gridlines
+    src: seed
+  - tc: 步驟
+    en: Step
+    src: seed
