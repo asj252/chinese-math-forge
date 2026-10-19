@@ -49,7 +49,7 @@ description: >
 專案還沒有進度表時，問使用者要翻哪個檔、譯本放哪裡，再從範本建一份進度表。
 
 - 狀態是 `in-progress` → 從「完成到 cell」欄記的索引 **+1** 接續，不要從頭重翻。
-- 譯本的路徑照進度表；新的檔案照專案既有的命名方式（例如原稿 `tc/ch02.ipynb` → 譯本 `en/ch02.ipynb`）。
+- 譯本的路徑照進度表；進度表「原稿」「譯本」兩欄一律填相對於進度表所在目錄（專案根目錄）的相對路徑，使用 `/`（例如原稿 `tc/ch02.ipynb` → 譯本 `en/ch02.ipynb`）。
 
 不必問使用者「上次翻到哪」——進度全部落在檔案裡。
 
@@ -78,7 +78,7 @@ python <本 skill 的目錄>/scripts/nb_extract.py tc/ch11.ipynb <臨時目錄>/
 而且選錯會讓讀者理解成不同的數學對象——那就要問。種子表第 0 節列的易誤譯詞
 （嵌射、映成函數、對射、純量、坐標變換矩陣）就是這一類。
 
-補完術語表後把 `meta.version` 加一、更新 `meta.updated` 與 `meta.covers`（已翻過的原稿）。
+補完術語表後把 `meta.version` 加一、更新 `meta.updated`；`meta.covers` 記已完成翻譯的原稿檔名（只寫檔名，如 `ch02.ipynb`，不含目錄；分批翻譯時於該檔案最後一批完成時才加入，若最後一批無新增術語也在此時更新 `meta.covers`；單批完成則於本批加入）。
 
 > **術語表沒鎖定的詞，不准出現在譯文裡。**
 
@@ -100,7 +100,7 @@ python <本 skill 的目錄>/scripts/nb_extract.py tc/ch11.ipynb <臨時目錄>/
 - **code cell**：只譯註解、docstring、會被印出／畫出的字串、顯示用的 dict key。
   改 dict key 時務必同步所有引用處（步驟 7 會檢查）。f-string 只譯文字部分，`{…}` 裡的運算式不動。
 
-把譯好的 cell 寫成 patch JSON（`{"0": "...", "3": "..."}`），同樣放臨時目錄。
+把譯好的 cell 寫成 patch JSON（`{"0": "...", "3": "..."}`；不含引用與 `{solution}` 的純文字 Markdown cell 若經使用者同意整格省略，保留原類型的空 cell、patch 值寫 `""`，見 `references/style.md` §1.4），同樣放臨時目錄。
 
 > **code cell 的推薦作法**：不要重打整格程式碼。讀出 TC 原始 source，
 > 寫一支定點替換腳本（每條替換 `assert` 命中次數），只換註解與字串。
@@ -150,8 +150,8 @@ python <本 skill 的目錄>/scripts/verify_translation.py tc/ch02.ipynb en/ch02
 
 ### 步驟 8：更新進度並 commit
 
-編輯進度表：狀態、完成到第幾個 cell、原稿指紋、commit、備註。
-若術語表有新增條目，一併說明新增了哪些。
+編輯進度表：狀態、完成到第幾個 cell、原稿指紋、最後一批的 commit（與譯本同一次提交時填本批 commit 訊息如 `translate: en/ch02.ipynb cells 0-19`，或於下一批回填上一批的短雜湊，不在同一筆提交裡預填自身的雜湊）、備註。
+若術語表有新增條目或更新了 `meta.covers`，一併說明並加入暫存。
 
 ```bash
 git add -- en/ch02.ipynb <進度表> <術語表>

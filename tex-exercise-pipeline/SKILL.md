@@ -14,7 +14,7 @@ description: >
 # LaTeX 习题 → 验算 Notebook 流水线
 
 本 skill 执行三个阶段，可单独或完整执行。
-若用户未指定阶段，默认执行全部三个阶段。习题与解答的语言跟随 `.tex` 原文（繁体或简体中文都可以）。
+若用户未指定阶段，默认执行全部三个阶段。习题、解答与验算代码中的全部中文（标题、注释、docstring 及 B1／B2 的输出文字）一律跟随 `.tex` 原文的语言（繁体或简体中文）。
 
 ```
 .tex 习题文件
@@ -25,7 +25,7 @@ MyST Markdown（中间产物 → 临时目录）
     │
     ▼  [阶段 B]
 验算 Notebook（中间产物 → 临时目录）
-  每道题一段代码，含执行输出
+  每道题一段代码（用户同意执行时含执行输出，见 B4）
     │
     ▼  [阶段 C：使用 scripts/assemble_ipynb.py]
 成品 Notebook（路径由用户指定）
@@ -83,7 +83,7 @@ MyST Markdown（中间产物 → 临时目录）
 
 - 题目之间用 `---` 分隔
 - 子节用 `### [子节标题]` 组织（如 `### 基础运算`、`### 投影与距离`）；阶段 C 会把它们原样变成单独的 markdown cell
-- 习题块里若还要嵌套 directive（如 `{tip}`、`{solution}`），外层的冒号要比里层多：例如外层 `:::::{exercise}`、里层 `::::{tip}`、`:::{solution}`
+- 习题块里若还要嵌套 directive（如 `{tip}`、`{solution}`），外层的冒号要比里层多：例如外层 `:::::{exercise}`、里层 `::::{tip}`、`:::{solution}`；用 `{tip}` 块写提示时，直接取代上方模板里的 `**提示：**` 行，不重复写两处提示
 - 向量用 `\mathbf{v}`（粗体小写），矩阵用 `\mathbf{A}`（粗体大写）
 - 索引从 0 开始（$v_0, v_1, \ldots$）
 - 解答中用 **步骤N：** 格式（中文冒号）
@@ -142,7 +142,7 @@ def triple(u, v, w):
     return np.dot(u, np.cross(v, w))
 ```
 
-辅助函数按题目需要增减；`print_header`、`print_step`、`compare_print` 三个固定保留。
+辅助函数按题目需要增减；`print_header`、`print_step`、`compare_print` 三个固定保留，其中输出文字（如「步骤」「代码计算值」「公式预期值」）与注释、docstring 的语言一律跟随习题语言（繁体习题用对应的繁体字样）。
 
 ### B2. 每道题的代码结构
 
@@ -177,8 +177,9 @@ print("\n验算（allclose）:", np.allclose(result, np.dot(u,v)/np.dot(u,u)*u))
 **命名与符号规范：**
 - 注释与 `print` 中使用 LaTeX 风格符号：`A^T`、`λ_i`、`||x||`、`Σ` 等
 - 向量用 `\mathbf{v}`（在 Markdown 标题中），代码中用小写 `u`, `v`, `w`
-- 索引从 0 开始（`v[0], v[1], ...`）
-- 样板里的「习题」「步骤」等字样跟随习题的语言（繁体原文就用对应的繁体字样）
+- 数组与向量下标索引从 0 开始（`v[0], v[1], ...`）；样板 `习题 [章号]-[题号]` 中的 `[题号]` 从 1 起算（如 `习题 2-1`）
+- 验算 notebook 的标题、注释、docstring 与输出文字（含 B1 的「步骤」「代码计算值」「公式预期值」及 B2 的「习题」「验算」等字样）一律跟随习题的语言（繁体原文就用对应的繁体字样）
+- 繁体原文的「列」是横行（row）、「行」是纵行（column），与大陆用法相反：照原文按行或列组矩阵、取子矩阵时，代码要与原文一致（如繁体原文写「以 a、b 为列」，是以 a、b 为 row，用 `np.vstack((a, b))`，不是 `np.column_stack`），验算的说明文字与代码写法要对得上
 
 ### B3. 代码组织策略（何时省略完整规范）
 
@@ -187,7 +188,7 @@ print("\n验算（allclose）:", np.allclose(result, np.dot(u,v)/np.dot(u,u)*u))
 - **无代码**（纯推导或存在性证明题）
 
 验算 Notebook 的结构（阶段 C 的脚本按这个结构读）：可选的 `# ` 标题 cell，接着第一个 code cell（imports + helpers），
-之后每段代码以一个 markdown cell `## 第 N 题：[题目标题]` 起头，后面跟一个或多个 code cell（需要时可以夹说明用的 markdown cell），
+之后每段代码以一个 markdown cell `## 第 N 题：[题目标题]` 起头（标题字样跟随习题语言，繁体原文的「第 N 题」与题目标题都用繁体字形；`N` 从 1 起算，与 B2 的 `[题号]` 一致；阶段 C 的 `mapping.json` 仍用 0-based 索引），后面跟一个或多个 code cell（需要时可以夹说明用的 markdown cell），
 直到下一个 `## `。不要有不属于任何一段的 cell；`# ` 与 `## ` 标题 cell 里只写一行标题，说明另起一个 markdown cell。
 
 ### B4. 执行并嵌入输出
@@ -200,7 +201,7 @@ jupyter nbconvert --to notebook --execute \
 ```
 
 需要用户的环境装有 `jupyter`（nbconvert）、ipykernel 与 numpy；没有时先问用户怎么执行，不要自行安装。
-若执行失败，检查并修正代码后重试。
+若执行失败，检查并修正代码后重试。若用户选择不执行（或当前环境无法执行），先对每个 code cell 做语法编译检查（如 `compile()`），保留无输出的验算 notebook 照样做阶段 C 组合，并在成品（如 `mapping.json` 的 `"intro"`）与回报中注明「验算代码未执行」（繁体习题用对应的繁体字样）。
 
 ### B5. 输出
 
@@ -276,7 +277,7 @@ python "<本 skill 的目录>\scripts\assemble_ipynb.py" "<临时目录>\ch2_exe
 动作：
   1. 读取用户给的 ch02_exercises.tex
   2. [阶段 A] 生成 MyST md → <临时目录>/ch2_exercises.md
-  3. [阶段 B] 生成验算 ipynb，执行并嵌入输出
+  3. [阶段 B] 生成验算 ipynb；用户同意执行时执行并嵌入输出（见 B4）
   4. [阶段 C] 生成 mapping.json，执行 assemble_ipynb.py
   5. 写入用户指定的成品路径
 ```

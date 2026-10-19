@@ -10,7 +10,7 @@ description: 審查繁體中文（TC）數學教材的 MyST Markdown 與 Jupyter
 ## 範圍與基準
 
 - 讀取專案自己的約定文件（如有）與適用的章節約定。本 skill 只審 TC；翻譯前審查以 TC 原稿為準。既有 EN 版僅作對照，不能反過來替 TC 補足未寫出的假設。
-- 確認目標檔、來源 commit、工作區是否有修改，並記錄實際讀取檔案的 SHA-256。使用工作區現有內容，不覆蓋既有修改。只審部分小節時明列範圍，不宣稱全章通過。
+- 確認目標檔、來源 commit、工作區是否有修改，並記錄實際讀取檔案位元組的 SHA-256（Windows 檢出為 CRLF 時按實際讀取的位元組計算，不另作換行轉換）。使用工作區現有內容，不覆蓋既有修改。只審部分小節時明列範圍，不宣稱全章通過。
 - 先通讀整章，建立定義、符號、全域假設及引用索引，再逐節檢查。使用本 skill 的 `scripts/nb_extract.py` 抽取 notebook source（可用 `--range` 分段），或以標準庫 json 讀取；cell 索引為 0-based，cell 內行號為 1-based。大型輸出分段讀至完整，不能把被截斷的輸出視為已讀。
 - 檢查可疑缺漏前，回查前文與相關引用。章首明確宣告的假設可以沿用；後章才補上的假設不能自動修補本章的無條件斷言。未取得引用來源時標明未驗證。
 - 以完整定義、定理與證明或完整小節為審查單位，不按固定 cell 數切斷論證。
@@ -42,7 +42,7 @@ description: 審查繁體中文（TC）數學教材的 MyST Markdown 與 Jupyter
 
 分別記錄問題類型、影響程度與判斷確定度：
 
-- 類型：`mathematical_error`、`missing_condition`、`ambiguity`、`pedagogical_simplification`、`style_preference`、`factual_claim`、`structural_issue`。
+- 類型：`mathematical_error`、`missing_condition`、`ambiguity`、`pedagogical_simplification`、`style_preference`、`factual_claim`、`structural_issue`。其中 `missing_condition` 既包括命題本身漏寫前提條件，也包括證明或例題套用定理時未驗證假設條件就直接引用結論的論證缺口（若對象本身不滿足假設或結論不成立，則歸 `mathematical_error`）。
 - 影響：`high`（核心結論或後續論證受影響）、`medium`（局部適用範圍或解讀受影響）、`low`（局部表達或排版）。
 - 判斷：`confirmed`、`needs_verification`、`dismissed`。無法證實的懷疑不得寫成已確定缺陷。
 

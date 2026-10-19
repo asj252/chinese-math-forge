@@ -12,27 +12,27 @@ description: 审查由繁体中文原稿（TC）转换而来的简体中文版�
 TC 与 SC 的行/列语义相反，同一上下文同时出现两套语义时极易误判。执行本 skill 期间一律遵守：
 
 1. **本 skill 及其产出中，裸写的「行」「列」只有简体语义：行 = row，列 = column。** 权威来源是 [`references/sc-conventions.md`](references/sc-conventions.md)；**不要载入繁体版的行／列惯例**（例如 `tc-math-rigor-auditor` 的惯例文件），需要解读 TC 原文时依第 2、3 条处理。
-2. **指涉 TC 原文时，不用自己的话复述其中的行/列。** 只能以「TC 原文」加引号逐字引用，并紧接标注英文语义，例如：TC 原文「第 2 列」（= row 2）。
+2. **指涉 TC 原文或既有 TC 审查报告时，不用自己的话复述其中的行/列。** 只能以「TC 原文」或「TC 报告」加引号逐字引用，并紧接标注英文语义，例如：TC 原文「第 2 列」（= row 2）。
 3. **比较 TC 与 SC 时，先把双方各自归一到语言无关的锚点，再比较锚点**：英文 row / column，或公式 $\text{row}_i(\mathbf{A})$、$\text{col}_j(\mathbf{A})$、下标位置、矩阵形状。禁止把 TC 的「行」直接与 SC 的「行」或「列」做字面比对。
 4. **报告中每一处涉及行/列的判断都附英文标注**，如「行向量（row vector）」「第 $i$ 列（column $i$）」，让读者无须信任审查者的语义判断即可核对。
-5. **阅读 TC 时只取数学内容与锚点，不吸收其行/列用字。** 读完一段 TC 后，用英文 row/column 记录要点，再回到 SC。
+5. **阅读 TC 原文及既有繁体审查报告（`rigor_TC_*.md`）时，只取数学内容与锚点，不吸收其行/列用字。** 繁体报告中的裸「行」「列」是 TC 语义（行 = column，列 = row），读完后一律先用英文 row/column 或公式／代码锚点记录要点，禁止把繁体报告里裸写的行/列直接转抄进 SC 报告。
 6. 独立复核时，交给复核者的说明也必须以本规则开头。
 
 ## 范围与基准
 
 - 读取 `references/sc-conventions.md`（行/列与序数的唯一依据）、项目自己的约定文件（如有；0-based、记号、MyST 与 label 规范）与项目的 SC 记号表（如有）。SC 记号表若由转换产生，属于审查对象，不能当作惯例依据。**审查对象是 SC**；对应的 TC 原稿（用户指定，或按项目的命名规则找到的同一章繁体档）是作者意图的对照基准，不是审查对象本身。EN 版仅作旁证，不能替 SC 或 TC 补足未写出的假设。
 - SC 由 TC 经 `tc-sc-ipynb-converter` / `tc-sc-converter` 自动转换产生。因此每项发现都要判定**根因来源**（见下文），这决定修复位置。
-- 确认目标档、对应 TC 档、来源 commit、工作区是否有修改，并记录两者的 SHA-256。使用工作区现有内容，不覆盖既有修改。只审部分小节时明列范围，不宣称全章通过。
+- 确认目标档、对应 TC 档、来源 commit、工作区是否有修改，并记录实际读取文件字节的 SHA-256（Windows 检出为 CRLF 时按实际读取的字节计算，不另作换行转换）。使用工作区现有内容，不覆盖既有修改。只审部分小节时明列范围，不宣称全章通过。
 - 先通读整章，建立定义、符号、全局假设及引用索引，再逐节检查。使用本 skill 的 `scripts/nb_extract.py` 分别抽取 SC 与 TC 的 notebook source（可用 `--range` 分段），或以标准库 json 读取；cell 索引为 0-based，cell 内行号为 1-based。大型输出分段读至完整，不能把被截断的输出视为已读。
 - 先核对 SC 与 TC 的 cell 数量与 cell 类型序列是否一致。不一致时先定位错位处并记为 `structural_issue`，其后按内容对齐，不能按索引盲目比对。
 - 检查可疑缺漏前，回查前文与相关引用。章首明确宣告的假设可以沿用；后章才补上的假设不能自动修补本章的无条件断言。
-- 若报告目录（默认 `rigor_reviews/`，见报告格式）已有该章 TC 报告（`rigor_TC_<TC 档名主体>.vN.md`，由 `tc-math-rigor-auditor` 产生），先读取：其中已确认的数学问题在 SC 中是否仍存在只需核对并引用原 id，不重复论证；但须检查报告对应的 TC 指纹是否仍是现行版本。
+- 若报告目录（默认 `rigor_reviews/`，见报告格式）已有该章 TC 报告（`rigor_TC_<TC 档名主体>.vN.md`，由 `tc-math-rigor-auditor` 产生），先读取（同样遵守上方行/列防污染规则，不吸收报告中的 TC 行/列用字）：其中已确认的数学问题在 SC 中是否仍存在只需核对并引用原 id，不重复论证；但须检查报告对应的 TC 指纹是否仍是现行版本。
 - 以完整定义、定理与证明或完整小节为审查单位，不按固定 cell 数切断论证。
 
 ## 判读约定（SC）
 
 - **行 = row、列 = column**（见上方防污染规则）。SC markdown 中的「第 $i$ 行」「行向量」「列空间」「初等行变换」按此理解；判断是否正确时，以上下文公式（$\text{row}_i$、$\text{col}_j$、下标位置、矩阵形状）及 TC 原文归一后的英文锚点为证据，不能靠字符串计数。
-- **Code cell 的注释、字符串与输出是已知高风险区**：TC 的 code cell 采用 TC 惯例，而 converter 目前不对 code cell 做行/列对调，SC 中可能原样保留 TC 语义（例：「矩阵以『行 = column』排列」）。逐处归一到 row/column 锚点，并与代码实际运算（`A[i, :]` 为 row、`A[:, j]` 为 column）核对；此类问题根因记为规则性 `conversion_error`。
+- **Code cell 的注释、字符串与输出是已知高风险区**：TC 的 code cell 采用 TC 惯例，而 converter 目前不对 code cell 做行/列对调，SC 中可能原样保留 TC 语义（例：「矩阵以『行 = column』排列」）。逐处归一到 row/column 锚点，并与代码实际运算（`A[i, :]` 为 row、`A[:, j]` 为 column）核对；此类问题根因记为 `conversion_error`，是否判为「规则性」照下文「根因来源」一节的机制证据门槛（同一章内 code cell 的行/列未对调可归类复现即算）；未读取 converter 时，规则建议照该节注明「按症状推断」。
 - 固定术语不属方向词：行列式、行为、平行、平行四边形、平行六面体、排列、序列、进行、执行、双行记法等。出现「列行式」「列为」等即为对调误伤。
 - 采 0-based 索引；内积对第二引数线性、第一引数共轭线性；$\mathbf{A}^*$ 为共轭转置。物理惯例与数学惯例不同不等于错误。
 - label 由 TC / SC / EN 三语共用，是定位信息。SC 的 label 与 TC 不一致、被转换改动或断链，记为 `structural_issue`；审查时不自行改动共用 label。
@@ -46,7 +46,7 @@ TC 与 SC 的行/列语义相反，同一上下文同时出现两套语义时极
 | `sc_only_edit` | SC 有 TC 没有的内容或改写，且该处有问题 | 修 SC，并提示作者该处已与 TC 分叉 |
 | `undetermined` | 无法判定 | 说明需要何种证据 |
 
-注意：直接修改 SC 而不处理根因，下次从 TC 重新转换时修改会被覆盖。报告中须对 `inherited_from_tc` 与规则性 `conversion_error` 明确写出这一点。
+注意：直接修改 SC 而不处理根因，下次从 TC 重新转换时修改会被覆盖。报告中须对 `inherited_from_tc` 与规则性 `conversion_error` 明确写出这一点。判为「规则性 `conversion_error`」（建议修改 converter 规则）需有可复现的机制证据：已核对 converter 的保护表／后处理表／脚本逻辑，或同一转换模式在章内可归类复现（如固定术语被行/列对调、占位符未还原、code cell 行/列未对调、OpenCC 固定词误转）；未读取 converter 时的规则建议须注明「按症状推断」。
 
 ## 检查重点
 
@@ -73,7 +73,7 @@ TC 与 SC 的行/列语义相反，同一上下文同时出现两套语义时极
 
 分别记录问题类型、影响程度、判断确定度与根因来源：
 
-- 类型：`mathematical_error`、`missing_condition`、`ambiguity`、`pedagogical_simplification`、`conversion_error`、`terminology`、`style_preference`、`factual_claim`、`structural_issue`。
+- 类型：`mathematical_error`、`missing_condition`、`ambiguity`、`pedagogical_simplification`、`conversion_error`、`terminology`、`style_preference`、`factual_claim`、`structural_issue`。其中 `missing_condition` 既包括命题本身漏写前提条件，也包括证明或例题应用定理时未验证假设条件就直接引用结论的论证缺口（若对象本身不满足假设或结论不成立，则归 `mathematical_error`）。「类型」描述问题本身的性质，「根因来源」描述问题从何而来，两者按组合填写：例如定理缺假设或应用时未验证假设且自 TC 忠实转来 → 类型 `missing_condition`、根因 `inherited_from_tc`；label、`{ref}` 或 cell 结构被转换改坏 → 类型 `structural_issue`、根因 `conversion_error`；台湾用语未转且造成数学歧义 → 类型 `terminology`、根因 `conversion_error`；行/列对调错误、占位符残留或公式被转换破坏 → 类型 `conversion_error`、根因 `conversion_error`。
 - 影响：`high`（核心结论或后续论证受影响；行/列对调导致数学意义相反一律至少 `medium`）、`medium`（局部适用范围或解读受影响）、`low`（局部表达或排版）。
 - 判断：`confirmed`、`needs_verification`、`dismissed`。无法证实的怀疑不得写成已确定缺陷。
 
